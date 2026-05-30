@@ -6,7 +6,7 @@ Drop the widget into any web page in under 5 minutes. The widget handles session
 
 ## Demo
 
-<video src="docs/voice-captcha-demo.mp4" controls style="max-width: 100%; border-radius: 8px; margin-bottom: 1rem;"></video>
+https://github.com/user-attachments/assets/26dd3e77-800d-4cb7-ac2c-b17594c670ba
 
 ---
 

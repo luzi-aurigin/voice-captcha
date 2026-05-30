@@ -69,32 +69,6 @@ The widget creates a session, fetches a challenge, signs verify/reveal requests 
 
 ---
 
-## How verification works
-
-```mermaid
-sequenceDiagram
-  participant Browser
-  participant CaptchaServer
-  participant YourBackend
-
-  Browser->>CaptchaServer: POST /api/session
-  CaptchaServer-->>Browser: sessionId, sessionKey
-  Browser->>CaptchaServer: GET /api/challenge?sessionId=
-  CaptchaServer-->>Browser: challengeId, sentence, promptText
-  Note over Browser: Record audio; optional reveal for part 2
-  Browser->>CaptchaServer: POST /api/verify (audio, proof, timestamp)
-  CaptchaServer-->>Browser: verificationToken
-  Browser->>YourBackend: form submit + verificationToken
-  YourBackend->>CaptchaServer: POST /api/siteverify (secret + token)
-  CaptchaServer-->>YourBackend: success
-```
-
-
-
-When integrating manually (without the widget), you must implement the same session and HMAC proof flow. The widget does this for you.
-
----
-
 ## Installation
 
 ### CDN

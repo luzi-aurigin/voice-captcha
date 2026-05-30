@@ -1,0 +1,35 @@
+{
+  "name": "voice-captcha",
+  "version": "1.0.0",
+  "description": "Drop-in voice CAPTCHA widget with deepfake detection",
+  "main": "src/voice-captcha.js",
+  "scripts": {
+    "test": "cd server && npm test"
+  },
+  "keywords": [
+    "captcha",
+    "voice",
+    "audio",
+    "deepfake",
+    "security",
+    "verification",
+    "biometric"
+  ],
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "src/",
+    "adapters/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luzi-aurigin/voice-captcha.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luzi-aurigin/voice-captcha/issues"
+  },
+  "homepage": "https://github.com/luzi-aurigin/voice-captcha#readme"
+}

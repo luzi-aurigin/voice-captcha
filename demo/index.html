@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Captcha Demo</title>
+  <link rel="stylesheet" href="../src/voice-captcha.css">
+  <style>
+    :root {
+      --demo-accent: #5b6ee8;
+      --demo-accent-hover: #4c5fd6;
+      --demo-surface: #ffffff;
+      --demo-text: #1a202c;
+      --demo-muted: #4a5568;
+      --demo-border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2rem 1.25rem 3rem;
+      background: linear-gradient(145deg, #5b6ee8 0%, #6b4fa2 55%, #4a3d7a 100%);
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+
+    .demo-container {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    .demo-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 1.75rem;
+    }
+
+    .demo-header h1 {
+      margin: 0 0 0.65rem;
+      font-size: clamp(1.75rem, 4vw, 2.15rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .demo-header .subtitle {
+      margin: 0 auto;
+      max-width: 36rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      opacity: 0.92;
+    }
+
+    .demo-header .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1.25rem;
+    }
+
+    .demo-header .pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+
+    .demo-card {
+      background: var(--demo-surface);
+      border-radius: 14px;
+      padding: clamp(1.25rem, 3vw, 2rem);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
+    }
+
+    .demo-form {
+      margin: 0;
+    }
+
+    .demo-form h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.2rem;
+      color: var(--demo-text);
+    }
+
+    .demo-form .form-hint {
+      margin: 0 0 1.25rem;
+      font-size: 0.875rem;
+      color: var(--demo-muted);
+      line-height: 1.45;
+    }
+
+    .form-field {
+      margin-bottom: 1rem;
+    }
+
+    .form-field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--demo-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-field input {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--demo-border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: var(--demo-text);
+    }
+
+    .form-field input:focus {
+      outline: 2px solid var(--demo-accent);
+      outline-offset: 1px;
+      border-color: transparent;
+    }
+
+    .captcha-field {
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .captcha-field-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--demo-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.7rem;
+      background: var(--demo-accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 1rem;
+    }
+
+    .submit-btn:hover:not(:disabled) { background: var(--demo-accent-hover); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .result-banner {
+      display: none;
+      padding: 0.875rem 1rem;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      line-height: 1.45;
+    }
+
+    .result-banner.success {
+      display: block;
+      background: #f0fff4;
+      color: #276749;
+      border: 1px solid #9ae6b4;
+    }
+
+    .result-banner.error {
+      display: block;
+      background: #fff5f5;
+      color: #c53030;
+      border: 1px solid #feb2b2;
+    }
+
+    .result-banner.pending {
+      display: block;
+      background: #ebf4ff;
+      color: #2b6cb0;
+      border: 1px solid #bee3f8;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <header class="demo-header">
+      <h1>Voice Captcha</h1>
+      <p class="subtitle">
+        Best method to confirm a human robust against bot swarms, scripted browsers like Playwright, or AI-automated browsers.
+      </p>
+      <div class="pill-row" aria-hidden="true">
+        <span class="pill">Liveness check</span>
+        <span class="pill">Deepfake detection</span>
+        <span class="pill">Drop-in replacement for reCAPTCHA</span>
+      </div>
+    </header>
+
+    <main class="demo-card">
+      <section class="demo-form" aria-labelledby="signup-heading">
+        <h2 id="signup-heading">Try it: sign-up form</h2>
+        <p class="form-hint">
+          Submit stays disabled until voice verification succeeds. On submit, the demo sends the
+          one-time <code>verificationToken</code> to the server (same pattern as reCAPTCHA siteverify).
+        </p>
+
+        <form id="signup-form" novalidate>
+          <div class="form-field">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+
+          <div class="form-field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Choose a password" autocomplete="new-password" required>
+          </div>
+
+          <div class="captcha-field">
+            <div class="captcha-field-label" id="captcha-label">Human verification</div>
+            <div id="voice-captcha-container" role="region" aria-labelledby="captcha-label"></div>
+          </div>
+
+          <button class="submit-btn" id="submit-btn" type="submit" disabled>Create account</button>
+        </form>
+
+        <div id="result-banner" class="result-banner" role="status" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../src/voice-captcha.js"></script>
+  <script>
+    const API_BASE =
+      window.location.protocol === 'file:'
+        ? 'http://localhost:3000'
+        : window.location.origin;
+
+    const submitBtn = document.getElementById('submit-btn');
+    const signupForm = document.getElementById('signup-form');
+    const resultBanner = document.getElementById('result-banner');
+
+    function showBanner(message, type) {
+      resultBanner.textContent = message;
+      resultBanner.className = type ? `result-banner ${type}` : 'result-banner';
+    }
+
+    function setSubmitEnabled(enabled) {
+      submitBtn.disabled = !enabled;
+    }
+
+    const captcha = new VoiceCaptcha({
+      apiEndpoint: `${API_BASE}/api/verify`,
+      lang: 'en',
+
+      onSuccess: () => {
+        setSubmitEnabled(true);
+        showBanner('Voice verified — you can submit the form.', 'success');
+      },
+
+      onError: (error) => {
+        setSubmitEnabled(false);
+        showBanner(
+          error.message || 'Verification failed. A new challenge will load shortly.',
+          'error',
+        );
+        setTimeout(() => {
+          if (!captcha.getVerificationToken()) {
+            resultBanner.className = 'result-banner';
+          }
+        }, 4000);
+      },
+    });
+
+    captcha.init('voice-captcha-container');
+
+    signupForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const verificationToken = captcha.getVerificationToken();
+      if (!verificationToken) {
+        showBanner('Complete the voice CAPTCHA before submitting.', 'error');
+        return;
+      }
+
+      setSubmitEnabled(false);
+      showBanner('Submitting…', 'pending');
+
+      try {
+        const response = await fetch(`${API_BASE}/api/demo/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            verificationToken,
+            email: document.getElementById('email').value,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || result.error || 'Submission failed.');
+        }
+
+        showBanner(result.message || 'Account created successfully.', 'success');
+        signupForm.reset();
+        setSubmitEnabled(false);
+        await captcha.reset();
+      } catch (error) {
+        showBanner(error.message, 'error');
+        setSubmitEnabled(!!captcha.getVerificationToken());
+      }
+    });
+  </script>
+</body>
+</html>

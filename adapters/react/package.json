@@ -1,0 +1,12 @@
+{
+  "name": "voice-captcha-react",
+  "version": "1.0.0",
+  "description": "React wrapper for the VoiceCaptcha widget",
+  "main": "index.jsx",
+  "module": "index.jsx",
+  "peerDependencies": {
+    "react": ">=17.0.0"
+  },
+  "keywords": ["captcha", "voice", "react", "deepfake"],
+  "license": "MIT"
+}

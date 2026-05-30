@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  voice-captcha:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - AURIGIN_API_KEY=${AURIGIN_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN:-*}
+      - REDIS_URL=redis://redis:6379
+      - CHALLENGE_EXPIRY_MS=${CHALLENGE_EXPIRY_MS:-90000}
+      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-100}
+      - RATE_LIMIT_VERIFY_MAX=${RATE_LIMIT_VERIFY_MAX:-20}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

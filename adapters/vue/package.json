@@ -1,0 +1,11 @@
+{
+  "name": "voice-captcha-vue",
+  "version": "1.0.0",
+  "description": "Vue 3 wrapper for the VoiceCaptcha widget",
+  "main": "VoiceCaptcha.vue",
+  "peerDependencies": {
+    "vue": ">=3.0.0"
+  },
+  "keywords": ["captcha", "voice", "vue", "vue3", "deepfake"],
+  "license": "MIT"
+}
